@@ -1,3 +1,3 @@
 name = "invoice-worker"
 type = "javascript"
-account_id = "<YOUR_CLOUDFLARE_ACCOUNT_ID>"
+account_id = "266b8e08fa2c55dd258b6f12cd3ea4a0b51fd"
