@@ -1,0 +1,36 @@
+name: Generate Invoice
+
+on:
+  repository_dispatch:
+    types: [generate-invoice]
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Save payload to file
+        run: echo '${{ github.event.client_payload }}' > payload.json
+
+      - name: Run invoice backend
+        run: python invoice-app/app.py --payload payload.json
+
+      - name: Commit generated PDFs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add invoice-app/orders/*
+          git commit -m "Add generated invoice PDFs"
+          git push
