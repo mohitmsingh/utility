@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Invoice Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Create Invoice</h2>
+  <label>Company Name:</label>
+  <input id="company_name" value="SK Creations"><br><br>
+
+  <label>Items (JSON format):</label><br>
+  <textarea id="items" rows="5" cols="50">[{"name":"Product A","quantity":2,"price":150}]</textarea><br><br>
+
+  <button onclick="generateInvoice()">Generate Invoice</button>
+
+  <pre id="output"></pre>
+
+  <script src="script.js"></script>
+</body>
+</html>
