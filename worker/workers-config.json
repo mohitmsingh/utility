@@ -1,0 +1,14 @@
+[
+  {
+    "name": "invoice-worker",
+    "folder": "worker/invoice-worker",
+    "account_id": "YOUR_CLOUDFLARE_ACCOUNT_ID",
+    "env": "production"
+  },
+  {
+    "name": "analytics-worker",
+    "folder": "worker/analytics-worker",
+    "account_id": "YOUR_CLOUDFLARE_ACCOUNT_ID",
+    "env": "production"
+  }
+]
