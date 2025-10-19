@@ -21,25 +21,35 @@ function removeRow(button) {
   row.remove();
 }
 
-export default async function handler(req, res) {
-  const { company_name, items } = req.body;
+async function generateInvoice() {
+  const companyName = document.getElementById("company_name").value;
+  
+  // Collect all items from your dynamic table
+  const items = [];
+  document.querySelectorAll(".item-row").forEach(row => {
+    items.push({
+      name: row.querySelector(".item-name").value,
+      quantity: Number(row.querySelector(".item-quantity").value),
+      price: Number(row.querySelector(".item-price").value)
+    });
+  });
 
-  const response = await fetch(
-    "https://api.github.com/repos/mohitmsingh/utility/dispatches",
-    {
+  try {
+    const response = await fetch("https://invoice-worker.mohit-itsector.workers.dev", {
       method: "POST",
-      headers: {
-        "Authorization": `token ${process.env.GITHUB_PAT}`,
-        "Accept": "application/vnd.github+json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        event_type: "generate-invoice",
-        client_payload: { company_name, items }
-      })
-    }
-  );
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ company_name: companyName, items })
+    });
 
-  if (response.ok) res.status(200).json({ success: true });
-  else res.status(500).json({ success: false, message: await response.text() });
+    if (response.ok) {
+      alert("Invoice generation job triggered. Check 'orders/' folder once workflow finishes.");
+    } else {
+      const text = await response.text();
+      alert("Failed to trigger invoice generation: " + text);
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Error triggering invoice generation.");
+  }
 }
